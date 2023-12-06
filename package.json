@@ -11,6 +11,7 @@
 	"author": "xapski",
 	"license": "ISC",
 	"dependencies": {
+		"@web5/api": "^0.8.2",
 		"express": "^4.18.2"
 	}
 }
