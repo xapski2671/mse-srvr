@@ -18,6 +18,14 @@ const mseProtocolDefinition = {
 			schema: "https://digitaldreamcrafters.dev/art",
 			dataFormats: ["application/json"],
 		},
+		creator: {
+			schema: "https://digitaldreamcrafters.dev/creator",
+			dataFormats: "application/json",
+		},
+		user: {
+			schema: "https://digitaldreamcrafters.dev/user",
+			dataFormats: "application/json",
+		},
 	},
 	structure: {
 		art: {
