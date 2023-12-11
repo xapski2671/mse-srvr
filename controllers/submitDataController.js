@@ -1,9 +1,9 @@
 import { Web5 } from "@web5/api"
-import { webcrypto } from "node:crypto"
+// import { webcrypto } from "node:crypto"
 import { v4 as uuidv4 } from "uuid"
 
 // @ts-ignore
-if (!globalThis.crypto) globalThis.crypto = webcrypto
+// if (!globalThis.crypto) globalThis.crypto = webcrypto
 
 async function findUserRecordId(web5, did) {
 	async function findFrodo(records) {

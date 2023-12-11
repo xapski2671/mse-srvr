@@ -1,8 +1,8 @@
 import { Web5 } from "@web5/api"
-import { webcrypto } from "node:crypto"
+// import { webcrypto } from "node:crypto"
 
 // @ts-ignore
-if (!globalThis.crypto) globalThis.crypto = webcrypto
+// if (!globalThis.crypto) globalThis.crypto = webcrypto
 
 const init = async (req, res) => {
 	const { web5, did: myDid } = await Web5.connect()
