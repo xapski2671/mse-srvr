@@ -89,20 +89,57 @@ const init = async (req, res) => {
 	await configureProtocol(web5, myDid)
 }
 
+// req.body = {username: campbell313}
 const signUser = async (req, res) => {
 	const { web5, did: myDid } = await Web5.connect()
 	const usr = await findUser(req, res, web5)
+	const udata = {
+		username: req.body.username,
+		did: myDid,
+		canView: [],
+		created: [],
+	}
 	if (usr.foundUser) {
-		res.send({ code: 313, message: "username_exists" })
+		res.send({
+			status: 313,
+			code: "username_already_exists",
+			message: usr.userFound,
+		})
 	} else {
 		const { record } = await web5.dwn.records.create({
-			data: req.body,
+			data: udata,
 			message: {
 				schema: "https://digitaldreamcrafters119.dev/user",
 				dataFormat: "application/json",
 			},
 		})
-		res.send({ code: 200, message: "signed_in" })
+		res.send({ status: 200, code: "signed_up", message: udata })
+	}
+}
+
+// req.body = {username: gonda5667, did: "did:ion:9834.."}
+const signable = async (req, res) => {
+	const { web5, did: myDid } = await Web5.connect()
+	const usr = await findUser(req, res, web5)
+	if (usr.foundUser) {
+		res.send({ status: 313, message: "username_already_exists" })
+	} else {
+		res.send({ status: 200, message: "username_available" })
+	}
+}
+
+// req.body = {username: gonda5667, did:"did:ion:9834..."}
+const login = async (req, res) => {
+	const { web5, did: myDid } = await Web5.connect()
+	const usr = await findUser(req, res, web5)
+	if (usr.foundUser) {
+		if (usr.userFound.did == req.body.did) {
+			res.send({ status: 200, code: "loggable", message: usr.userFound })
+		} else {
+			res.send({ status: 315, message: "mismatch" })
+		}
+	} else {
+		res.send({ status: 314, message: "no_such_user" })
 	}
 }
 
@@ -118,26 +155,38 @@ async function findUser(req, res, web5) {
 	if (!records || !(records.length > 0)) {
 		return { foundUser: false, userFound: {} }
 	} else {
-		const result = records.filter(findFrodo)
+		const result = await findFrodo(records)
 		if (result.length > 0) {
 			const re = await result[0].data.text()
+			console.log(re)
 			return { foundUser: true, userFound: JSON.parse(re) }
 		} else {
 			return { foundUser: false, userFound: {} }
 		}
 	}
 
-	async function findFrodo(rec) {
-		try {
-			const re = await rec.data.text()
-			// console.log(JSON.parse(re).username)
-			if (JSON.parse(re).username == req.body.username) {
-				return rec
+	async function findFrodo(records) {
+		let usrArr = []
+		for (let record of records) {
+			const re = JSON.parse(await record.data.text())
+			if (re) {
+				usrArr.push(re.username)
 			}
-		} catch (error) {
-			console.log(error)
+		}
+
+		if (usrArr.length > 0) {
+			const foundDuplicate = usrArr.findIndex((user) => {
+				return user == req.body.username
+			})
+			if (foundDuplicate > -1) {
+				return [records[foundDuplicate]]
+			} else {
+				return []
+			}
+		} else {
+			return []
 		}
 	}
 }
 
-export { init, signUser, findUser }
+export { init, signUser, findUser, login, signable }

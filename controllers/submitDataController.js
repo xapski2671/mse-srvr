@@ -6,15 +6,26 @@ import { v4 as uuidv4 } from "uuid"
 if (!globalThis.crypto) globalThis.crypto = webcrypto
 
 async function findUserRecordId(web5, did) {
-	async function findFrodo(rec) {
-		try {
-			const re = await rec.data.text()
-			// console.log(JSON.parse(re).username)
-			if (JSON.parse(re).did == did) {
-				return rec
+	async function findFrodo(records) {
+		let usrArr = []
+		for (let record of records) {
+			const re = JSON.parse(await record.data.text())
+			if (re) {
+				usrArr.push(re.did)
 			}
-		} catch (error) {
-			console.log(error)
+		}
+
+		if (usrArr.length > 0) {
+			const foundDuplicate = usrArr.findIndex((userDID) => {
+				return userDID == did
+			})
+			if (foundDuplicate > -1) {
+				return [records[foundDuplicate]]
+			} else {
+				return []
+			}
+		} else {
+			return []
 		}
 	}
 
@@ -29,7 +40,7 @@ async function findUserRecordId(web5, did) {
 	if (!records || !(records.length > 0)) {
 		return { foundUser: false, userRID: "", userRecord: {} }
 	} else {
-		const result = records.filter(findFrodo)
+		const result = await findFrodo(records)
 		if (result.length > 0) {
 			// const re = await result[0].data.text()
 			return { foundUser: true, userRID: result[0].id, userRecord: result[0] }
@@ -39,6 +50,14 @@ async function findUserRecordId(web5, did) {
 	}
 }
 
+// req.body = {
+// 	userDID: UserDID,
+// 	projectName: PName,
+// 	projectImage: pImg,
+// 	projectTagL: PTagL,
+// 	artQuantity: AQty,
+// 	tiers: tiers,
+// }
 const submitData = async (req, res) => {
 	const project = req.body
 	const { web5, did: myDid } = await Web5.connect()
@@ -119,25 +138,25 @@ const submitData = async (req, res) => {
 			}
 		}
 
-		res.json({ code: 200, msg: "project_submitted" })
+		res.json({ status: 200, msg: "project_submitted" })
 	} else {
-		res.json({ code: 314, msg: "user_not_found" })
+		res.json({ status: 314, msg: "user_not_found" })
 	}
 }
 
-const findTier = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
-	console.log(req.body)
-	const { record } = await web5.dwn.records.read({
-		message: {
-			filter: {
-				recordId: req.body.rid,
-			},
-		},
-	})
+// const findTier = async (req, res) => {
+// 	const { web5, did: myDid } = await Web5.connect()
+// 	console.log(req.body)
+// 	const { record } = await web5.dwn.records.read({
+// 		message: {
+// 			filter: {
+// 				recordId: req.body.rid,
+// 			},
+// 		},
+// 	})
 
-	console.log(JSON.parse(await record.data.text()).tName)
-	res.send({ code: 200, message: "recieved" })
-}
+// 	console.log(JSON.parse(await record.data.text()).tName)
+// 	res.send({ status: 200, message: "recieved" })
+// }
 
-export { submitData, findTier }
+export { submitData }

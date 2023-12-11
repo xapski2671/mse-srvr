@@ -5,6 +5,7 @@ import web5Route from "./routes/web5Route.js"
 import submitDataRoute from "./routes/submitDataRoute.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import getTiersRoute from "./routes/getTiersRoute.js"
 
 const app = express()
 app.use(express.static("uploads"))
@@ -23,3 +24,4 @@ app.get("/", (req, res) => {
 app.use("/images", imagesRoute)
 app.use("/web5", web5Route)
 app.use("/data", submitDataRoute)
+app.use("/get-viewable", getTiersRoute)
