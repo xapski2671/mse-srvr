@@ -8,19 +8,19 @@ const init = async (req, res) => {
 	const { web5, did: myDid } = await Web5.connect()
 
 	const protocolDef = {
-		protocol: "https://digitaldreamcrafters119.dev",
+		protocol: "https://digitaldreamcrafters120.dev",
 		published: true,
 		types: {
 			user: {
-				schema: "https://digitaldreamcrafters119.dev/user",
+				schema: "https://digitaldreamcrafters120.dev/user",
 				dataFormats: ["application/json"],
 			},
 			project: {
-				schema: "https://digitaldreamcrafters119.dev/user/project",
+				schema: "https://digitaldreamcrafters120.dev/user/project",
 				dataFormats: ["application/json"],
 			},
 			tier: {
-				schema: "https://digitaldreamcrafters119.dev/user/project/tier",
+				schema: "https://digitaldreamcrafters120.dev/user/project/tier",
 				dataFormats: ["application/json"],
 			},
 		},
@@ -48,7 +48,7 @@ const init = async (req, res) => {
 		return await web5.dwn.protocols.query({
 			message: {
 				filter: {
-					protocol: "https://digitaldreamcrafters119.dev",
+					protocol: "https://digitaldreamcrafters120.dev",
 				},
 			},
 		})
@@ -109,7 +109,7 @@ const signUser = async (req, res) => {
 		const { record } = await web5.dwn.records.create({
 			data: udata,
 			message: {
-				schema: "https://digitaldreamcrafters119.dev/user",
+				schema: "https://digitaldreamcrafters120.dev/user",
 				dataFormat: "application/json",
 			},
 		})
@@ -147,7 +147,7 @@ async function findUser(req, res, web5) {
 	const { records } = await web5.dwn.records.query({
 		message: {
 			filter: {
-				schema: "https://digitaldreamcrafters119.dev/user",
+				schema: "https://digitaldreamcrafters120.dev/user",
 			},
 		},
 	})

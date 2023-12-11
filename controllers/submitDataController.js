@@ -32,7 +32,7 @@ async function findUserRecordId(web5, did) {
 	const { records } = await web5.dwn.records.query({
 		message: {
 			filter: {
-				schema: "https://digitaldreamcrafters119.dev/user",
+				schema: "https://digitaldreamcrafters120.dev/user",
 			},
 		},
 	})
@@ -77,11 +77,11 @@ const submitData = async (req, res) => {
 		const { record: projectRecord } = await web5.dwn.records.create({
 			data: pData,
 			message: {
-				schema: "https://digitaldreamcrafters119.dev/user/project",
+				schema: "https://digitaldreamcrafters120.dev/user/project",
 				// contextId: doesUserExist.userRID,
 				// parentId: doesUserExist.userRID,
 				dataFormat: "application/json",
-				// protocol: "https://digitaldreamcrafters119.dev",
+				// protocol: "https://digitaldreamcrafters120.dev",
 				// protocolPath: "user/project",
 			},
 		})
@@ -112,11 +112,11 @@ const submitData = async (req, res) => {
 					pCreatorDID: tier.projectCreatorDID,
 				},
 				message: {
-					schema: "https://digitaldreamcrafters119.dev/user/project/tier",
+					schema: "https://digitaldreamcrafters120.dev/user/project/tier",
 					// contextId: doesUserExist.userRID,
 					// parentId: projectRecord.id,
 					dataFormat: "application/json",
-					// protocol: "https://digitaldreamcrafters119.dev",
+					// protocol: "https://digitaldreamcrafters120.dev",
 					// protocolPath: "user/project/tier",
 				},
 			})
