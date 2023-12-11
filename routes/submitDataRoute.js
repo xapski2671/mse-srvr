@@ -1,8 +1,9 @@
 import { Router } from "express"
-import { submitData } from "../controllers/submitDataController.js"
+import { findTier, submitData } from "../controllers/submitDataController.js"
 
 const submitDataRoute = Router()
 
 submitDataRoute.post("/", submitData)
+submitDataRoute.post("/find-tier", findTier)
 
 export default submitDataRoute
