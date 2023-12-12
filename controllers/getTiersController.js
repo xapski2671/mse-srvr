@@ -1,13 +1,15 @@
-import { Web5 } from "@web5/api"
-import { webcrypto } from "node:crypto"
-import { v4 as uuidv4 } from "uuid"
+// import { Web5 } from "@web5/api"
+// import { webcrypto } from "node:crypto"
+// import { v4 as uuidv4 } from "uuid"
 
-// @ts-ignore
-if (!globalThis.crypto) globalThis.crypto = webcrypto
+// // @ts-ignore
+// if (!globalThis.crypto) globalThis.crypto = webcrypto
+import { web5, myDid } from "../index.js"
 
 // req.body.canView = ["bafye2...", "bafy3wq....", "bafyoo6..."]
 const getTierDetails = async (req, res) => {
 	const { web5, did: myDid } = await Web5.connect()
+
 	let tiers = []
 
 	for (let id of req.body.canView) {

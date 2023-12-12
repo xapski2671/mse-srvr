@@ -1,9 +1,11 @@
-import { Web5 } from "@web5/api"
+// import { Web5 } from "@web5/api"
 // import { webcrypto } from "node:crypto"
-import { v4 as uuidv4 } from "uuid"
+// import { v4 as uuidv4 } from "uuid"
 
-// @ts-ignore
+// // @ts-ignore
 // if (!globalThis.crypto) globalThis.crypto = webcrypto
+// const { web5, did: myDid } = await Web5.connect()
+import { web5, myDid } from "../index.js"
 
 async function findUserRecordId(web5, did) {
 	async function findFrodo(records) {
@@ -60,7 +62,6 @@ async function findUserRecordId(web5, did) {
 // }
 const submitData = async (req, res) => {
 	const project = req.body
-	const { web5, did: myDid } = await Web5.connect()
 
 	const pData = {
 		pName: project.projectName,

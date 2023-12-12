@@ -1,12 +1,12 @@
-import { Web5 } from "@web5/api"
+// import { Web5 } from "@web5/api"
 // import { webcrypto } from "node:crypto"
 
-// @ts-ignore
+// // @ts-ignore
 // if (!globalThis.crypto) globalThis.crypto = webcrypto
+// const { web5, did: myDid } = await Web5.connect()
+import { web5, myDid } from "../index.js"
 
 const init = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
-
 	const protocolDef = {
 		protocol: "https://digitaldreamcrafters120.dev",
 		published: true,
@@ -91,7 +91,6 @@ const init = async (req, res) => {
 
 // req.body = {username: campbell313}
 const signUser = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
 	const usr = await findUser(req, res, web5)
 	const udata = {
 		username: req.body.username,
@@ -117,20 +116,22 @@ const signUser = async (req, res) => {
 	}
 }
 
-// req.body = {username: gonda5667, did: "did:ion:9834.."}
+// req.body = {username: gonda5667}
 const signable = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
 	const usr = await findUser(req, res, web5)
 	if (usr.foundUser) {
-		res.send({ status: 313, message: "username_already_exists" })
+		res.send({
+			status: 313,
+			success: false,
+			message: "username_already_exists",
+		})
 	} else {
-		res.send({ status: 200, message: "username_available" })
+		res.send({ status: 200, success: true, message: "username_available" })
 	}
 }
 
 // req.body = {username: gonda5667, did:"did:ion:9834..."}
 const login = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
 	const usr = await findUser(req, res, web5)
 	if (usr.foundUser) {
 		if (usr.userFound.did == req.body.did) {
