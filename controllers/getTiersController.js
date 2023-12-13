@@ -8,8 +8,6 @@ import { web5, myDid } from "../index.js"
 
 // req.body.canView = ["bafye2...", "bafy3wq....", "bafyoo6..."]
 const getTierDetails = async (req, res) => {
-	const { web5, did: myDid } = await Web5.connect()
-
 	let tiers = []
 
 	for (let id of req.body.canView) {
