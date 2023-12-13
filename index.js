@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import getTiersRoute from "./routes/getTiersRoute.js"
 import { webcrypto } from "node:crypto"
+import getPublicTiersRoute from "./routes/getPublicTiersRoute.js"
 
 // @ts-ignore
 if (!globalThis.crypto) globalThis.crypto = webcrypto
@@ -29,5 +30,6 @@ app.get("/", (req, res) => {
 app.use("/web5", web5Route)
 app.use("/data", submitDataRoute)
 app.use("/get-viewable", getTiersRoute)
+app.use("/get-public", getPublicTiersRoute)
 
 export { web5, myDid }

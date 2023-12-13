@@ -52,6 +52,51 @@ async function findUserRecordId(web5, did) {
 	}
 }
 
+async function findUserRecordIdByUsrName(web5, username) {
+	async function findFrodo(records) {
+		let usrArr = []
+		for (let record of records) {
+			const re = JSON.parse(await record.data.text())
+			if (re) {
+				usrArr.push(re.username)
+			}
+		}
+
+		if (usrArr.length > 0) {
+			const foundDuplicate = usrArr.findIndex((userName) => {
+				return userName == username
+			})
+			if (foundDuplicate > -1) {
+				return [records[foundDuplicate]]
+			} else {
+				return []
+			}
+		} else {
+			return []
+		}
+	}
+
+	const { records } = await web5.dwn.records.query({
+		message: {
+			filter: {
+				schema: "https://digitaldreamcrafters120.dev/user",
+			},
+		},
+	})
+
+	if (!records || !(records.length > 0)) {
+		return { foundUser: false, userRID: "", userRecord: {} }
+	} else {
+		const result = await findFrodo(records)
+		if (result.length > 0) {
+			// const re = await result[0].data.text()
+			return { foundUser: true, userRID: result[0].id, userRecord: result[0] }
+		} else {
+			return { foundUser: false, userRID: "", userRecord: {} }
+		}
+	}
+}
+
 // req.body = {
 // 	userDID: UserDID,
 // 	projectName: PName,
@@ -65,13 +110,13 @@ const submitData = async (req, res) => {
 
 	const pData = {
 		pName: project.projectName,
-		pCreatorDID: project.userDID,
+		pCreatorUsername: project.username,
 		pImage: project.projectImage,
 		pTagLine: project.projectTagL,
 		pQuantity: project.artQuantity,
 	}
 
-	const doesUserExist = await findUserRecordId(web5, project.userDID)
+	const doesUserExist = await findUserRecordIdByUsrName(web5, project.username)
 	if (doesUserExist.foundUser) {
 		// check if creator wants to modify an already made project
 		// PROJECT RECORD
@@ -110,7 +155,7 @@ const submitData = async (req, res) => {
 					artWorks: tier.artWorks,
 					pName: tier.projectName,
 					pImage: tier.projectImage,
-					pCreatorDID: tier.projectCreatorDID,
+					pCreatorUsername: tier.projectCreatorUsername,
 				},
 				message: {
 					schema: "https://digitaldreamcrafters120.dev/user/project/tier",
@@ -124,7 +169,7 @@ const submitData = async (req, res) => {
 			// console.log(tierRecord)
 
 			for (let viewer of tier.aViewers) {
-				const userRec = await findUserRecordId(web5, viewer)
+				const userRec = await findUserRecordIdByUsrName(web5, viewer)
 				if (userRec.foundUser) {
 					const viewerRecord = userRec.userRecord
 					const viewerObject = JSON.parse(await viewerRecord.data.text())

@@ -6,11 +6,11 @@
 // if (!globalThis.crypto) globalThis.crypto = webcrypto
 import { web5, myDid } from "../index.js"
 
-// req.body.canView = ["bafye2...", "bafy3wq....", "bafyoo6..."]
+// req.body.tiers = ["bafye2...", "bafy3wq....", "bafyoo6..."]
 const getTierDetails = async (req, res) => {
 	let tiers = []
 
-	for (let id of req.body.canView) {
+	for (let id of req.body.tiers) {
 		const tier = await findTier(id, web5)
 		if (tier) {
 			tiers.push(tier)

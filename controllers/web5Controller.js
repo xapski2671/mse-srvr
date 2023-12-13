@@ -134,6 +134,7 @@ const signable = async (req, res) => {
 const login = async (req, res) => {
 	const usr = await findUser(req, res, web5)
 	if (usr.foundUser) {
+		console.log(usr.foundUser, req.body.did)
 		if (usr.userFound.did == req.body.did) {
 			res.send({ status: 200, code: "loggable", message: usr.userFound })
 		} else {
