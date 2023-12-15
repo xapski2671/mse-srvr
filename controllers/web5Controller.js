@@ -91,6 +91,7 @@ const init = async (req, res) => {
 
 // req.body = {username: campbell313}
 const signUser = async (req, res) => {
+	console.log(req.body)
 	const usr = await findUser(req, res, web5)
 	const udata = {
 		username: req.body.username,
