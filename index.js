@@ -12,18 +12,20 @@ import getPublicTiersRoute from "./routes/getPublicTiersRoute.js"
 if (!globalThis.crypto) globalThis.crypto = webcrypto
 const { web5, did: myDid } = await Web5.connect()
 
+const PORT = process.env.PORT || 5001
+
 const app = express()
 app.use(express.static("uploads"))
 
 app.use(cors())
 app.use(express.json({ limit: "50mb" }))
 app.use(cookieParser())
-app.listen(5001, () => {
-	console.log("api running on port 5001")
+app.listen(PORT, () => {
+	console.log(`api running on port ${PORT}`)
 })
 
 app.get("/", (req, res) => {
-	res.json("api running on port 5001⭐")
+	res.json(`api running on port ${PORT}⭐`)
 })
 
 // app.use("/images", imagesRoute)
